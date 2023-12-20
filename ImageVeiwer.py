@@ -12,7 +12,7 @@ def open_image():
     image_path = askopenfilename()
 
     # Open the image using PIL
-    image = Image.open(image_path)
+    image = Image.open(image_path).convert("RGB")
 
     # Convert the PIL image to a PhotoImage object
     photo = ImageTk.PhotoImage(image)
@@ -34,12 +34,14 @@ def open_image():
 
     # Update the coordinates label whenever the mouse is moved over the image
     def update_coords(event):
-        # Get the color of the pixel under the mouse cursor
-        r, g, b = image.getpixel((event.x, event.y))
-        color = f"rgb({r}, {g}, {b})"
+        # Check if the mouse's position is within the image
+        if 0 <= event.x < image.width and 0 <= event.y < image.height:
+            # Get the color of the pixel under the mouse cursor
+            r, g, b = image.getpixel((event.x, event.y))
+            color = f"rgb({r}, {g}, {b})"
 
-        coords_label.config(text=f"({event.x}, {event.y})")
-        color_label.config(text=f"{color}")
+            coords_label.config(text=f"({event.x}, {event.y})")
+            color_label.config(text=f"Color: {color}")
 
     label.bind("<Motion>", update_coords)
 
